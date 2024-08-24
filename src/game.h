@@ -7,6 +7,7 @@
 
 typedef struct {
     Vector2 Pieces[GridSize];
+    Vector2 MovementDirection;
     int Size;
 } Snake;
 
