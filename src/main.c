@@ -42,6 +42,22 @@ int main(void) {
         // Update
         frameCounter++;
 
+        if (IsKeyDown(KEY_W) && snake->MovementDirection.y != 1) {
+            snake->MovementDirection = (Vector2){0, -1};
+        }
+
+        if (IsKeyDown(KEY_S) && snake->MovementDirection.y != -1) {
+            snake->MovementDirection = (Vector2){0, 1};
+        }
+
+        if (IsKeyDown(KEY_A) && snake->MovementDirection.x != 1) {
+            snake->MovementDirection = (Vector2){-1, 0};
+        }
+
+        if (IsKeyDown(KEY_D) && snake->MovementDirection.x != -1) {
+            snake->MovementDirection = (Vector2){1, 0};
+        }
+
         if (frameCounter % 20 == 0) {
             // Move snake every 20 frame?
             for (int i = snake->Size - 1; i >= 1; i--) {
@@ -60,10 +76,6 @@ int main(void) {
 
         DrawRectangle(0, 0, constants.ScreenWidth, constants.ScreenHeight, DARKGRAY);
 
-        DrawTexture(game_state.FoodTexture,
-                    (game_state.FoodPosition.x - game_state.FoodTexture.width / 2) * constants.TileWidth,
-                    (game_state.FoodPosition.y - game_state.FoodTexture.height / 2) * constants.TileHeight, WHITE);
-
         DrawRectangle(snake->Pieces[0].x * constants.TileWidth, snake->Pieces[0].y * constants.TileHeight,
                       constants.SnakeBlockSize, constants.SnakeBlockSize, DARKGREEN);
 
@@ -71,6 +83,10 @@ int main(void) {
             DrawRectangle(snake->Pieces[i].x * constants.TileWidth, snake->Pieces[i].y * constants.TileHeight,
                           constants.SnakeBlockSize, constants.SnakeBlockSize, GREEN);
         }
+
+        DrawTexture(game_state.FoodTexture,
+                    (game_state.FoodPosition.x - game_state.FoodTexture.width / 2) * constants.TileWidth,
+                    (game_state.FoodPosition.y - game_state.FoodTexture.height / 2) * constants.TileHeight, WHITE);
 
         EndDrawing();
     }
