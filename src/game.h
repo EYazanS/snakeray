@@ -12,7 +12,7 @@ typedef struct {
 } Snake;
 
 typedef struct {
-    AudioStream Audio[2];
+    Music Audio[2];
     Texture2D FoodTexture;
     Vector2 FoodPosition;
     Snake Snake;

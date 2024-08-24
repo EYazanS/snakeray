@@ -20,6 +20,8 @@ int main(void) {
 
     InitWindow(constants.ScreenWidth, constants.ScreenHeight, "Snakrray");
 
+    InitAudioDevice();  // Initialize audio device
+
     SetTargetFPS(60);
 
     Image foodImage = LoadImage("assets/food.png");
@@ -27,6 +29,10 @@ int main(void) {
     ImageResize(&foodImage, constants.TileWidth, constants.TileHeight);
 
     game_state.FoodTexture = LoadTextureFromImage(foodImage);  // Image converted to texture, GPU memory (VRAM);
+    game_state.Audio[0] = LoadMusicStream("assets/eat.mp3");
+    game_state.Audio[1] = LoadMusicStream("assets/wall.mp3");
+    game_state.Audio[0].looping = false;
+    game_state.Audio[1].looping = false;
 
     Snake* snake = &game_state.Snake;
 
@@ -43,6 +49,8 @@ int main(void) {
     while (!WindowShouldClose()) {
         // Update
         frameCounter++;
+
+        UpdateMusicStream(game_state.Audio[0]);
 
         if (IsKeyDown(KEY_W) && snake->MovementDirection.y != 1) {
             snake->MovementDirection = (Vector2){0, -1};
@@ -75,6 +83,8 @@ int main(void) {
             snake->Pieces[snake->Size].x = snake->Pieces[snake->Size - 1].x;
             snake->Pieces[snake->Size].y = snake->Pieces[snake->Size - 1].y;
             snake->Size++;
+
+            PlayMusicStream(game_state.Audio[0]);
 
             int new_valid_position = 1;
 
@@ -114,17 +124,12 @@ int main(void) {
         DrawTexture(game_state.FoodTexture, game_state.FoodPosition.x * constants.TileWidth,
                     game_state.FoodPosition.y * constants.TileHeight, WHITE);
 
-        // for (int i = 0; i < constants.GridWidth; i++) {
-        //     for (int j = 0; j < constants.GridHeight; j++) {
-        //         DrawRectangle(i * constants.TileWidth, j * constants.TileHeight, constants.TileWidth - 1,
-        //                       constants.TileHeight - 1, BLUE);
-        //     }
-        // }
-
         EndDrawing();
     }
 
     // De-Initialization
+    CloseAudioDevice();  // Close audio device (music streaming is automatically stopped)
+
     CloseWindow();
 
     return 0;
