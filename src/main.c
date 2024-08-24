@@ -51,6 +51,7 @@ int main(void) {
         frameCounter++;
 
         UpdateMusicStream(game_state.Audio[0]);
+        UpdateMusicStream(game_state.Audio[1]);
 
         if (IsKeyDown(KEY_W) && snake->MovementDirection.y != 1) {
             snake->MovementDirection = (Vector2){0, -1};
@@ -93,8 +94,8 @@ int main(void) {
             do {
                 new_valid_position = 1;
 
-                new_position.x = GetRandomValue(1, constants.GridWidth);
-                new_position.y = GetRandomValue(1, constants.GridWidth);
+                new_position.x = GetRandomValue(1, constants.GridWidth - 1);
+                new_position.y = GetRandomValue(1, constants.GridHeight - 1);
 
                 for (int i = snake->Size - 1; i >= 1; i--) {
                     if (snake->Pieces[i].x == new_position.x && snake->Pieces[i].y == new_position.y) {
@@ -104,6 +105,18 @@ int main(void) {
             } while (!new_valid_position);
 
             game_state.FoodPosition = new_position;
+        }
+
+        if (snake->Pieces[0].x < 0 || snake->Pieces[0].y < 0 || snake->Pieces[0].x == constants.GridWidth ||
+            snake->Pieces[0].y == constants.GridHeight) {
+            // TODO: Gameover
+            PlayMusicStream(game_state.Audio[1]);
+        }
+
+        for (int i = snake->Size - 1; i >= 1; i--) {
+            if (snake->Pieces[i].x == snake->Pieces[0].x && snake->Pieces[i].y == snake->Pieces[0].y) {
+                // TODO: Gameover
+            }
         }
 
         // Draw

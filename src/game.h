@@ -16,7 +16,6 @@ typedef struct {
     Texture2D FoodTexture;
     Vector2 FoodPosition;
     Snake Snake;
-    Vector2 Grid;
 } GameState;
 
 typedef struct {
