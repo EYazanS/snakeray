@@ -6,7 +6,7 @@ int main(void) {
     // Initialization
     Constants constants = {};
     constants.ScreenWidth = 800;
-    constants.ScreenHeight = 450;
+    constants.ScreenHeight = 800;
     constants.Margin = 10;
     constants.SnakeBlockSize = 20;
 
@@ -24,6 +24,8 @@ int main(void) {
 
     Image foodImage = LoadImage("assets/food.png");
 
+    ImageResize(&foodImage, constants.TileWidth, constants.TileHeight);
+
     game_state.FoodTexture = LoadTextureFromImage(foodImage);  // Image converted to texture, GPU memory (VRAM);
 
     Snake* snake = &game_state.Snake;
@@ -34,7 +36,7 @@ int main(void) {
     snake->Pieces[2] = (Vector2){3, 5};
     snake->MovementDirection = (Vector2){1, 0};
 
-    game_state.FoodPosition = (Vector2){25, 25};
+    game_state.FoodPosition = (Vector2){constants.GridWidth / 2, constants.GridHeight / 2};
 
     unsigned long frameCounter = 0;
 
@@ -58,7 +60,7 @@ int main(void) {
             snake->MovementDirection = (Vector2){1, 0};
         }
 
-        if (frameCounter % 20 == 0) {
+        if (frameCounter % 5 == 0) {
             // Move snake every 20 frame?
             for (int i = snake->Size - 1; i >= 1; i--) {
                 snake->Pieces[i].x = snake->Pieces[i - 1].x;
@@ -70,8 +72,8 @@ int main(void) {
         }
 
         if (snake->Pieces[0].x == game_state.FoodPosition.x && snake->Pieces[0].y == game_state.FoodPosition.y) {
-            snake->Pieces[snake->Size + 1].x = snake->Pieces[snake->Size].x;
-            snake->Pieces[snake->Size + 1].y = snake->Pieces[snake->Size].y;
+            snake->Pieces[snake->Size].x = snake->Pieces[snake->Size - 1].x;
+            snake->Pieces[snake->Size].y = snake->Pieces[snake->Size - 1].y;
             snake->Size++;
 
             int new_valid_position = 1;
@@ -109,9 +111,15 @@ int main(void) {
                           constants.SnakeBlockSize, constants.SnakeBlockSize, GREEN);
         }
 
-        DrawTexture(game_state.FoodTexture,
-                    game_state.FoodPosition.x  * constants.TileWidth,
-                    game_state.FoodPosition.y  * constants.TileHeight, WHITE);
+        DrawTexture(game_state.FoodTexture, game_state.FoodPosition.x * constants.TileWidth,
+                    game_state.FoodPosition.y * constants.TileHeight, WHITE);
+
+        // for (int i = 0; i < constants.GridWidth; i++) {
+        //     for (int j = 0; j < constants.GridHeight; j++) {
+        //         DrawRectangle(i * constants.TileWidth, j * constants.TileHeight, constants.TileWidth - 1,
+        //                       constants.TileHeight - 1, BLUE);
+        //     }
+        // }
 
         EndDrawing();
     }
