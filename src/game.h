@@ -5,7 +5,7 @@
 
 #define GridSize 1024
 
-typedef enum { MAIN_MENU, PLAYING, GAME_OVER } GameMode;
+typedef enum { MAINMENU, GAMEPLAY, GAMEOVER } GameMode;
 
 typedef struct {
   Vector2 Pieces[GridSize];
@@ -19,6 +19,7 @@ typedef struct {
   Vector2 FoodPosition;
   Snake Snake;
   GameMode Mode;
+  int Score;
 } GameState;
 
 typedef struct {
